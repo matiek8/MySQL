@@ -1,0 +1,24 @@
+mysql> delimiter $$
+mysql> drop function if exists getmobilephonebystudentid $$
+Query OK, 0 rows affected, 1 warning (0,02 sec)
+
+mysql> create function getmobilephonebystudentid (p_studentid integer)
+    -> returns varchar(11)
+    -> begin
+    -> declare varphone varchar(11);
+    -> select phone into varphone
+    -> from phone_list
+    -> where studentid = p_Studentid and phonetype = 'mob'
+    -> limit 1;
+    -> return varphone;
+    -> end $$
+Query OK, 0 rows affected (0,00 sec)
+
+mysql> delimiter ;
+mysql> select getmobilephonebystudentid(345568);
++-----------------------------------+
+| getmobilephonebystudentid(345568) |
++-----------------------------------+
+| 89217234567                       |
++-----------------------------------+
+1 row in set (0,00 sec)
