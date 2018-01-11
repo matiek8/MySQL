@@ -1,0 +1,28 @@
+mysql> delimiter $$
+mysql> drop function if exists getStudentAvgMark $$
+Query OK, 0 rows affected, 1 warning (0,00 sec)
+
+mysql> Create function getStudentAvgMark (p_studentid integer)
+    -> returns real
+    -> begin
+    -> declare varstudentAvgMark Real;
+    -> select avg(mark) into varstudentAvgMark
+    -> from exam_result
+    -> where exam_result.studentid = p_studentid;
+    -> return varstudentAvgMark;
+    -> end $$
+Query OK, 0 rows affected (0,00 sec)
+
+mysql> delimiter ;
+mysql> select studentid, studentname, getStudentAvgMark(studentid) as avgmark from student;
++-----------+-------------------+---------+
+| studentid | studentname       | avgmark |
++-----------+-------------------+---------+
+|    345567 | Ivanov Aleksandr  |       5 |
+|    345568 | Shirokov Fedor    |     3.5 |
+|    345569 | Antonova Dasha    |     3.5 |
+|    345570 | Antipenko Denis   |     4.5 |
+|    345571 | Sidorov Aleksandr |     2.5 |
+|    345572 | Fadeev Dmitriy    |       5 |
++-----------+-------------------+---------+
+6 rows in set (0,00 sec)
