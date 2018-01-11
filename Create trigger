@@ -1,0 +1,24 @@
+mysql> delimiter $$
+
+mysql> create trigger tr_ins_teacher
+    -> before insert on teacher
+    -> for each row 
+    -> begin
+    -> declare varNextTeacherId integer;
+    -> select max(teacherid)+1 into varNextTeacherId from teacher;
+    -> set new.teacherid=varNextTeacherId;
+    -> end $$
+Query OK, 0 rows affected (0,03 sec)
+
+mysql> delimiter ;
+mysql> insert into teacher(teachername, position) values('ogurtsov Ivan', 'docent');
+Query OK, 1 row affected (0,01 sec)
+
+mysql> select * from teacher;
++-----------+---------------+----------+
+| TeacherId | TeacherName   | Position |
++-----------+---------------+----------+
+|         1 | Petrov Ivan   | prof     |
+|         2 | Semenova Anna | docent   |
+|         3 | ogurtsov Ivan | docent   |
++-----------+---------------+----------+
