@@ -22,3 +22,14 @@ mysql> select getmobilephonebystudentid(345568);
 | 89217234567                       |
 +-----------------------------------+
 1 row in set (0,00 sec)
+
+mysql> select getmobilephonebystudentid(studentid) as studentname, phonetype, phone from phone_list;
++-------------+-----------+-------------+
+| studentname | phonetype | phone       |
++-------------+-----------+-------------+
+| 89211264567 | mob       | 89211264567 |
+| 89217234567 | mob       | 89217234567 |
+| 89071254567 | mob       | 89071254567 |
+| 88121239567 | mob       | 88121239567 |
++-------------+-----------+-------------+
+4 rows in set (0,00 sec)
