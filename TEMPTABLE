@@ -1,0 +1,25 @@
+mysql> create view v_student_exam_result as select studentid, count(*) as TheBestMarkCount from exam_result where mark=5 group by studentid;
+Query OK, 0 rows affected (0,02 sec)
+
+mysql> select max(thebestmarkcount) from v_student_exam_result;
++-----------------------+
+| max(thebestmarkcount) |
++-----------------------+
+|                     2 |
++-----------------------+
+1 row in set (0,00 sec)
+
+mysql> create temporary table tmp_table select studentid, count(*) as thebestmarkcount from exam_result where mark=5 group by studentid;
+Query OK, 4 rows affected (0,01 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select max(thebestmarkcount) from tmp_table;
++-----------------------+
+| max(thebestmarkcount) |
++-----------------------+
+|                     2 |
++-----------------------+
+1 row in set (0,00 sec)
+
+mysql> drop table tmp_table;
+Query OK, 0 rows affected (0,00 sec
