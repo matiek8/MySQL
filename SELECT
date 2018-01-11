@@ -1,0 +1,238 @@
+mysql> select * from student;
++-----------+-------------------+-------------+------------+----------------------------+
+| StudentId | StudentName       | GroupNumber | BirthDate  | Address                    |
++-----------+-------------------+-------------+------------+----------------------------+
+|    345567 | Ivanov Aleksandr  |         341 | 1999-01-20 | Petergof, Bibliotechnay, 2 |
+|    345568 | Shirokov Fedor    |         341 | 1998-03-21 | SPb, GAVANSKAYA 34         |
+|    345569 | Antonova Dasha    |         341 | 1999-05-17 | SPb, Shirokay 45           |
+|    345570 | Antipenko Denis   |         371 | 1998-08-11 | SPB, Malyi 15              |
+|    345571 | Sidorov Aleksandr |         371 | 1999-07-12 | SPb, Sredniy 4             |
+|    345572 | Fadeev Dmitriy    |         371 | 1999-11-24 | SPb, Nevskiy 23            |
++-----------+-------------------+-------------+------------+----------------------------+
+6 rows in set (0,00 sec)
+
+mysql> select * from teacher;
++-----------+---------------+----------+
+| TeacherId | TeacherName   | Position |
++-----------+---------------+----------+
+|         1 | Petrov Ivan   | prof     |
+|         2 | Semenova Anna | docent   |
++-----------+---------------+----------+
+2 rows in set (0,00 sec)
+
+mysql> Select all GroupNumber from student;
++-------------+
+| GroupNumber |
++-------------+
+|         341 |
+|         341 |
+|         341 |
+|         371 |
+|         371 |
+|         371 |
++-------------+
+6 rows in set (0,00 sec)
+
+mysql> Select distinct GroupNumber from student;
++-------------+
+| GroupNumber |
++-------------+
+|         341 |
+|         371 |
++-------------+
+2 rows in set (0,01 sec)
+
+mysql> select StudentId, StudentName, MonthName(BirthDate) MonthName_of_BirthDate from Student;
++-----------+-------------------+------------------------+
+| StudentId | StudentName       | MonthName_of_BirthDate |
++-----------+-------------------+------------------------+
+|    345567 | Ivanov Aleksandr  | January                |
+|    345568 | Shirokov Fedor    | March                  |
+|    345569 | Antonova Dasha    | May                    |
+|    345570 | Antipenko Denis   | August                 |
+|    345571 | Sidorov Aleksandr | July                   |
+|    345572 | Fadeev Dmitriy    | November               |
++-----------+-------------------+------------------------+
+6 rows in set (0,01 sec)
+
+mysql> select Studentid, studentname, BirthDate from student where month(birthdate)>=6 and month(birthdate) <= 8;
++-----------+-------------------+------------+
+| Studentid | studentname       | BirthDate  |
++-----------+-------------------+------------+
+|    345570 | Antipenko Denis   | 1998-08-11 |
+|    345571 | Sidorov Aleksandr | 1999-07-12 |
+
+mysql> select distinct studentid from exam_result where mark between 3 and 5;
++-----------+
+| studentid |
++-----------+
+|    345567 |
+|    345568 |
+|    345569 |
+|    345570 |
+|    345571 |
+|    345572 |
++-----------+
+6 rows in set (0,01 sec)
+
+mysql> select* from exam_sheet where classroom is null;
++-------------+-------------+----------+-----------+-----------+------------+
+| ExamSheetId | GroupNumber | CourseId | TeacherId | ClassRoom | ExamDate   |
++-------------+-------------+----------+-----------+-----------+------------+
+|           4 |         371 |        2 |         2 |      NULL | 2017-01-26 |
++-------------+-------------+----------+-----------+-----------+------------+
+1 row in set (0,00 sec)
+
+mysql> select * from student where Address like '%Malyi%';
++-----------+-----------------+-------------+------------+---------------+
+| StudentId | StudentName     | GroupNumber | BirthDate  | Address       |
++-----------+-----------------+-------------+------------+---------------+
+|    345570 | Antipenko Denis |         371 | 1998-08-11 | SPB, Malyi 15 |
++-----------+-----------------+-------------+------------+---------------+
+1 row in set (0,00 sec)
+
+mysql> select distinct studentid from exam_result where mark in (2,4);
++-----------+
+| studentid |
++-----------+
+|    345568 |
+|    345569 |
+|    345570 |
+|    345571 |
++-----------+
+
+mysql> select studentname from student order by studentname;
++-------------------+
+| studentname       |
++-------------------+
+| Antipenko Denis   |
+| Antonova Dasha    |
+| Fadeev Dmitriy    |
+| Ivanov Aleksandr  |
+| Shirokov Fedor    |
+| Sidorov Aleksandr |
++-------------------+
+mysql> select studentname from student order by studentname limit 5;
++------------------+
+| studentname      |
++------------------+
+| Antipenko Denis  |
+| Antonova Dasha   |
+| Fadeev Dmitriy   |
+| Ivanov Aleksandr |
+| Shirokov Fedor   |
++------------------+
+
+mysql> select count(distinct groupnumber) as groupcount from student;
++------------+
+| groupcount |
++------------+
+|          2 |
++------------+
+1 row in set (0,01 sec)
+
+mysql> select count(groupnumber) as groupcount from student;
++------------+
+| groupcount |
++------------+
+|          6 |
++------------+
+mysql> select avg(mark) as avgmark from exam_result;
++---------+
+| avgmark |
++---------+
+|  4.0000 |
++---------+
+1 row in set (0,00 sec)
+mysql> select min(birthdate) as minbirthdate, max(birthdate) as maxbirthday from student;
++--------------+-------------+
+| minbirthdate | maxbirthday |
++--------------+-------------+
+| 1998-03-21   | 1999-11-24  |
++--------------+-------------+
+1 row in set (0,01 sec)
+
+mysql> select classroom, examdate, count(*) as examcount from exam_sheet group by classroom, examdate;
++-----------+------------+-----------+
+| classroom | examdate   | examcount |
++-----------+------------+-----------+
+|      NULL | 2017-01-26 |         1 |
+|      2408 | 2017-01-25 |         1 |
+|      2408 | 2017-01-27 |         1 |
+|      2446 | 2017-01-28 |         1 |
+
+mysql> select year(birthdate) as 'year', count(*) as 'count of student' from student group by year(birthdate);
++------+------------------+
+| year | count of student |
++------+------------------+
+| 1998 |                2 |
+| 1999 |                4 |
++------+------------------+
+
+mysql> select studentid from exam_result group by studentid having min(mark)=5;
++-----------+
+| studentid |
++-----------+
+|    345567 |
+|    345572 |
++-----------+
+
+mysql> select coursetitle, teachername, groupnumber, examdate from course, exam_sheet, teacher where course.courseid=exam_sheet.courseid and teacher.teacherid=exam_sheet.teacherid;
++-------------+---------------+-------------+------------+
+| coursetitle | teachername   | groupnumber | examdate   |
++-------------+---------------+-------------+------------+
+| Physics     | Petrov Ivan   |         341 | 2017-01-25 |
+| Physics     | Petrov Ivan   |         371 | 2017-01-27 |
+| Data Base   | Semenova Anna |         341 | 2017-01-28 |
+| Data Base   | Semenova Anna |         371 | 2017-01-26 |
++-------------+---------------+-------------+------------+
+
+select a.studentname, b.studentname from student a inner join student b on a.studentid<>b.studentid order by 1,2;
++-------------------+-------------------+
+| studentname       | studentname       |
++-------------------+-------------------+
+| Antipenko Denis   | Antonova Dasha    |
+| Antipenko Denis   | Fadeev Dmitriy    |
+| Antipenko Denis   | Ivanov Aleksandr  |
+| Antipenko Denis   | Shirokov Fedor    |
+| Antipenko Denis   | Sidorov Aleksandr |
+| Antonova Dasha    | Antipenko Denis   |
+| Antonova Dasha    | Fadeev Dmitriy    |
+| Antonova Dasha    | Ivanov Aleksandr  |
+| Antonova Dasha    | Shirokov Fedor    |
+| Antonova Dasha    | Sidorov Aleksandr |
+| Fadeev Dmitriy    | Antipenko Denis   |
+| Fadeev Dmitriy    | Antonova Dasha    |
+| Fadeev Dmitriy    | Ivanov Aleksandr  |
+| Fadeev Dmitriy    | Shirokov Fedor    |
+| Fadeev Dmitriy    | Sidorov Aleksandr |
+| Ivanov Aleksandr  | Antipenko Denis   |
+| Ivanov Aleksandr  | Antonova Dasha    |
+| Ivanov Aleksandr  | Fadeev Dmitriy    |
+| Ivanov Aleksandr  | Shirokov Fedor    |
+| Ivanov Aleksandr  | Sidorov Aleksandr |
+| Shirokov Fedor    | Antipenko Denis   |
+| Shirokov Fedor    | Antonova Dasha    |
+| Shirokov Fedor    | Fadeev Dmitriy    |
+| Shirokov Fedor    | Ivanov Aleksandr  |
+| Shirokov Fedor    | Sidorov Aleksandr |
+| Sidorov Aleksandr | Antipenko Denis   |
+| Sidorov Aleksandr | Antonova Dasha    |
+| Sidorov Aleksandr | Fadeev Dmitriy    |
+| Sidorov Aleksandr | Ivanov Aleksandr  |
+| Sidorov Aleksandr | Shirokov Fedor    |
++-------------------+-------------------+
+
+mysql> select studentname, phone
+    -> from student left outer join phone_list
+    -> on student.studentid = phone_list.studentid;
++-------------------+-------------+
+| studentname       | phone       |
++-------------------+-------------+
+| Ivanov Aleksandr  | 89211264567 |
+| Shirokov Fedor    | 89217234567 |
+| Sidorov Aleksandr | 89071254567 |
+| Fadeev Dmitriy    | 88121239567 |
+| Antonova Dasha    | NULL        |
+| Antipenko Denis   | NULL        |
++-------------------+-------------+
